@@ -214,6 +214,54 @@
   }
   .gallery-note b{color:var(--navy);}
 
+  /* categoría + contador de fotos sobre la tarjeta */
+  .shot .pill{
+    position:absolute; top:8px; left:8px; z-index:2;
+    background:var(--orange); color:var(--white); font-family:var(--mono);
+    font-size:10.5px; letter-spacing:.04em; padding:4px 9px; text-transform:uppercase;
+  }
+  .shot .count{
+    position:absolute; top:8px; right:8px; z-index:2;
+    background:rgba(0,18,31,.75); color:var(--white); font-family:var(--mono);
+    font-size:11px; padding:4px 8px; border-radius:3px;
+  }
+  .shot{cursor:pointer;}
+
+  /* ============ MATERIALES (productos en venta) ============ */
+  .product-card{
+    background:var(--white); border:1px solid var(--line); overflow:hidden;
+    display:flex; flex-direction:column; cursor:pointer;
+  }
+  .product-card .thumb{position:relative; height:210px; overflow:hidden; background:var(--navy-deep);}
+  .product-card .thumb img{width:100%; height:100%; object-fit:cover; transition:transform .5s ease;}
+  .product-card:hover .thumb img{transform:scale(1.06);}
+  .product-card .info{padding:16px 18px; display:flex; flex-direction:column; gap:6px; flex:1;}
+  .product-card .info b{font-size:15px; color:var(--navy);}
+  .product-card .info p{font-size:13.5px; color:var(--gray); margin:0;}
+  .product-card .wa-link{
+    margin-top:auto; align-self:flex-start; font-family:var(--mono); font-size:12px;
+    color:var(--orange); text-decoration:none; padding-top:6px;
+  }
+  .product-card .wa-link:hover{text-decoration:underline;}
+
+  /* ============ LIGHTBOX ============ */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(0,18,31,.94); z-index:9999;
+    display:none; align-items:center; justify-content:center; padding:30px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-inner{max-width:900px; width:100%; max-height:90vh; overflow-y:auto; background:var(--white); padding:26px;}
+  .lightbox-inner h3{margin:0 0 4px; color:var(--navy); font-family:var(--display);}
+  .lightbox-inner .lb-cat{font-family:var(--mono); font-size:11px; color:var(--orange); text-transform:uppercase; letter-spacing:.04em;}
+  .lightbox-inner p{color:var(--gray); margin:8px 0 18px;}
+  .lightbox-media{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .lightbox-media img, .lightbox-media video{width:100%; height:220px; object-fit:cover;}
+  @media(max-width:600px){.lightbox-media{grid-template-columns:1fr;}}
+  .lightbox-close{
+    position:absolute; top:18px; right:24px; color:var(--white); font-size:32px;
+    cursor:pointer; line-height:1; background:none; border:none;
+  }
+
   .tiktok-block{
     margin-top:40px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
     padding:28px 30px; background:var(--navy-deep); color:var(--white);
@@ -295,6 +343,7 @@
       <a href="#servicios">Servicios</a>
       <a href="#llave-en-mano">Trabajo vendido</a>
       <a href="#galeria">Galería</a>
+      <a href="#materiales">Materiales</a>
       <a href="#confianza">Por qué TerraFix</a>
       <a href="#cotizar">Cotizar</a>
     </nav>
@@ -429,6 +478,31 @@
     </div>
   </div>
 </section>
+
+<!-- ============ MATERIALES EN VENTA ============ -->
+<section id="materiales" class="bg-paper">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Catálogo de materiales</div>
+      <h2>Porcelanato, cerámica y piedra disponibles para tu proyecto</h2>
+      <p>Materiales que tenemos disponibles para venta directa, con la opción de instalarlos nosotros mismos.</p>
+    </div>
+    <div class="gallery-grid reveal" id="productsGrid">
+      <!-- Se cargan automáticamente desde content/products.json -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIGHTBOX (visor de fotos/videos) ============ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <div class="lightbox-inner">
+    <div class="lb-cat" id="lbCat"></div>
+    <h3 id="lbTitle"></h3>
+    <p id="lbCaption"></p>
+    <div class="lightbox-media" id="lbMedia"></div>
+  </div>
+</div>
 
 <!-- ============ CONFIANZA ============ -->
 <section id="confianza">
@@ -583,18 +657,52 @@
 
   // galería dinámica — lee content/gallery.json (editable desde /admin sin tocar código)
   const galleryGrid = document.getElementById('galleryGrid');
+  const productsGrid = document.getElementById('productsGrid');
+  const lightbox = document.getElementById('lightbox');
+  const lbCat = document.getElementById('lbCat');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbCaption = document.getElementById('lbCaption');
+  const lbMedia = document.getElementById('lbMedia');
+
+  function mediaCount(item) {
+    return (item.photos ? item.photos.length : 0) + (item.videos ? item.videos.length : 0);
+  }
+
+  function coverThumb(item) {
+    if (item.photos && item.photos.length) return `<img src="${item.photos[0]}" alt="${item.title || ''}" loading="lazy">`;
+    if (item.videos && item.videos.length) return `<video src="${item.videos[0]}" muted loop playsinline autoplay style="width:100%;height:230px;object-fit:cover;"></video>`;
+    return '';
+  }
+
+  function openLightbox(item) {
+    lbCat.textContent = item.category || '';
+    lbTitle.textContent = item.title || '';
+    lbCaption.textContent = item.caption || '';
+    const photosHtml = (item.photos || []).map(src => `<img src="${src}" alt="${item.title || ''}">`).join('');
+    const videosHtml = (item.videos || []).map(src => `<video src="${src}" controls playsinline></video>`).join('');
+    lbMedia.innerHTML = photosHtml + videosHtml;
+    lightbox.classList.add('open');
+  }
+
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
   fetch('content/gallery.json?_=' + Date.now())
     .then(r => r.json())
     .then(data => {
       const items = data.items || [];
-      galleryGrid.innerHTML = items.map(item => `
-        <figure class="shot"><span class="corner c-tl"></span><span class="corner c-br"></span>
-          ${item.video
-            ? `<video src="${item.video}" muted loop playsinline autoplay style="width:100%;height:230px;object-fit:cover;"></video>`
-            : `<img src="${item.image}" alt="${item.title || ''}" loading="lazy">`}
+      galleryGrid.innerHTML = items.map((item, i) => `
+        <figure class="shot" data-idx="${i}">
+          <span class="corner c-tl"></span><span class="corner c-br"></span>
+          ${item.category ? `<span class="pill">${item.category}</span>` : ''}
+          ${mediaCount(item) > 1 ? `<span class="count">+${mediaCount(item)}</span>` : ''}
+          ${coverThumb(item)}
           <figcaption><b>${item.title || ''}</b>${item.caption || ''}</figcaption>
         </figure>
       `).join('');
+      galleryGrid.querySelectorAll('.shot').forEach(el => {
+        el.addEventListener('click', () => openLightbox(items[+el.dataset.idx]));
+      });
       if ('IntersectionObserver' in window) {
         const io2 = new IntersectionObserver((entries) => {
           entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } });
@@ -603,6 +711,44 @@
       } else { galleryGrid.classList.add('in'); }
     })
     .catch(() => { galleryGrid.innerHTML = '<p style="color:#6E6F6F;">La galería se está actualizando, vuelve a intentarlo en un momento.</p>'; });
+
+  // catálogo de materiales en venta — lee content/products.json
+  fetch('content/products.json?_=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      const items = data.items || [];
+      if (!items.length) {
+        productsGrid.innerHTML = '<p style="color:#6E6F6F;">Muy pronto vas a encontrar aquí nuestros materiales disponibles.</p>';
+        return;
+      }
+      productsGrid.innerHTML = items.map((item, i) => {
+        const waText = encodeURIComponent(`Hola, me interesa el material "${item.title || ''}" que vi en la página`);
+        return `
+        <div class="product-card" data-idx="${i}">
+          <div class="thumb">
+            ${item.category ? `<span class="pill">${item.category}</span>` : ''}
+            ${mediaCount(item) > 1 ? `<span class="count">+${mediaCount(item)}</span>` : ''}
+            ${coverThumb(item)}
+          </div>
+          <div class="info">
+            <b>${item.title || ''}</b>
+            <p>${item.caption || ''}</p>
+            <a class="wa-link" href="https://wa.me/56946163281?text=${waText}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Consultar por WhatsApp →</a>
+          </div>
+        </div>`;
+      }).join('');
+      productsGrid.querySelectorAll('.product-card').forEach(el => {
+        el.addEventListener('click', () => openLightbox(items[+el.dataset.idx]));
+      });
+      if ('IntersectionObserver' in window) {
+        const io3 = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io3.unobserve(e.target); } });
+        }, {threshold:.15});
+        io3.observe(productsGrid);
+      } else { productsGrid.classList.add('in'); }
+    })
+    .catch(() => { productsGrid.innerHTML = '<p style="color:#6E6F6F;">El catálogo se está actualizando, vuelve a intentarlo en un momento.</p>'; });
+
 
   const reveals = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
