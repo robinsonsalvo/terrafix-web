@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "title": "Proceso de instalación",
+      "caption": "Sistemas de nivelación mecánica en acción",
+      "image": "assets/galeria-instalacion.jpg"
+    },
+    {
+      "title": "Terminación de pisos",
+      "caption": "Líneas de fragüe perfectas en pasillos y halls",
+      "image": "assets/galeria-pisos.jpg"
+    },
+    {
+      "title": "Baños y cocinas",
+      "caption": "Detalle y calces en revestimientos de muro",
+      "image": "assets/galeria-calces.jpg"
+    },
+    {
+      "title": "Obra entregada",
+      "caption": "Porcelanato limpio y listo para habitar",
+      "image": "assets/galeria-entregada.jpg"
+    },
+    {
+      "title": "Cerámica símil madera",
+      "caption": "Instalación de cerámica imitación parquet",
+      "image": "assets/galeria-madera.jpg"
+    },
+    {
+      "title": "Diseño decorativo",
+      "caption": "Composición geométrica en cerámicas grises",
+      "image": "assets/galeria-decorativo.jpg"
+    }
+  ]
+}

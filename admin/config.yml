@@ -1,0 +1,25 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Todo lo que se suba desde el panel se guarda dentro de esta carpeta del proyecto
+media_folder: "assets/gallery-subidas"
+public_folder: "assets/gallery-subidas"
+
+collections:
+  - name: "gallery"
+    label: "Galería del sitio"
+    files:
+      - file: "content/gallery.json"
+        label: "Fotos y videos"
+        name: "gallery"
+        fields:
+          - label: "Elementos de la galería"
+            name: "items"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - {label: "Título", name: "title", widget: "string"}
+              - {label: "Descripción corta", name: "caption", widget: "string", required: false}
+              - {label: "Foto", name: "image", widget: "image", required: false, hint: "Usa esto para una foto. Deja vacío si vas a subir un video."}
+              - {label: "Video (archivo .mp4, liviano)", name: "video", widget: "file", required: false, hint: "Usa esto solo para videos cortos y livianos (menos de 20 MB). Para videos largos, es mejor seguir usando el link directo a TikTok."}
