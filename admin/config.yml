@@ -8,18 +8,55 @@ public_folder: "assets/gallery-subidas"
 
 collections:
   - name: "gallery"
-    label: "Galería del sitio"
+    label: "Trabajos realizados"
     files:
       - file: "content/gallery.json"
-        label: "Fotos y videos"
+        label: "Trabajos (galería)"
         name: "gallery"
         fields:
-          - label: "Elementos de la galería"
+          - label: "Trabajos"
             name: "items"
             widget: "list"
-            summary: "{{title}}"
+            summary: "{{title}} — {{category}}"
             fields:
-              - {label: "Título", name: "title", widget: "string"}
+              - {label: "Título del trabajo", name: "title", widget: "string", hint: "Ej: Baño terminado en Ñuñoa"}
+              - {label: "Categoría", name: "category", widget: "string", required: false, hint: "Ej: Baños y cocinas, Copropiedad, Pisos, Pintura. Aparece como etiqueta sobre la foto."}
               - {label: "Descripción corta", name: "caption", widget: "string", required: false}
-              - {label: "Foto", name: "image", widget: "image", required: false, hint: "Usa esto para una foto. Deja vacío si vas a subir un video."}
-              - {label: "Video (archivo .mp4, liviano)", name: "video", widget: "file", required: false, hint: "Usa esto solo para videos cortos y livianos (menos de 20 MB). Para videos largos, es mejor seguir usando el link directo a TikTok."}
+              - label: "Fotos de este trabajo"
+                name: "photos"
+                widget: "list"
+                required: false
+                field: {label: "Foto", name: "image", widget: "image"}
+                hint: "Puedes agregar varias fotos del mismo trabajo — todas van a aparecer juntas."
+              - label: "Videos de este trabajo"
+                name: "videos"
+                widget: "list"
+                required: false
+                field: {label: "Video (.mp4, liviano, menos de 20 MB)", name: "video", widget: "file"}
+                hint: "Solo videos cortos y livianos. Para videos largos, usa el link a TikTok."
+
+  - name: "products"
+    label: "Materiales en venta"
+    files:
+      - file: "content/products.json"
+        label: "Materiales y piezas"
+        name: "products"
+        fields:
+          - label: "Materiales"
+            name: "items"
+            widget: "list"
+            summary: "{{title}} — {{category}}"
+            fields:
+              - {label: "Nombre del material/pieza", name: "title", widget: "string", hint: "Ej: Porcelanato símil piedra gris"}
+              - {label: "Categoría", name: "category", widget: "string", hint: "Ej: Porcelanato símil piedra, Cerámica símil madera, Revestimientos"}
+              - {label: "Descripción corta", name: "caption", widget: "string", required: false, hint: "Ej: Formato 60x60, antideslizante, ideal para exterior"}
+              - label: "Fotos del material"
+                name: "photos"
+                widget: "list"
+                required: false
+                field: {label: "Foto", name: "image", widget: "image"}
+              - label: "Videos del material"
+                name: "videos"
+                widget: "list"
+                required: false
+                field: {label: "Video (.mp4, liviano)", name: "video", widget: "file"}
