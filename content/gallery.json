@@ -1,45 +1,57 @@
 {
   "items": [
     {
-      "title": "Proceso de instalación",
-      "category": "Instalación",
-      "caption": "Sistemas de nivelación mecánica en acción",
-      "photos": ["assets/galeria-instalacion.jpg"],
+      "title": "Baño en porcelanato símil piedra",
+      "category": "revestimientos",
+      "caption": "Porcelanato rectificado, símil piedra/madera, tono beige claro. Disponible en formatos 30x60 cm y 120x60 cm. Apto para piso y muro, interior y exterior techado. Baja absorción de agua (<0,5%), ideal para zonas húmedas como baños y cocinas. Acabado mate/satinado, alta resistencia al tránsito y fácil mantención.",
+      "photos": [
+        "assets/galeria-instalacion.jpg"
+      ],
       "videos": []
     },
     {
       "title": "Terminación de pisos",
       "category": "Pisos",
       "caption": "Líneas de fragüe perfectas en pasillos y halls",
-      "photos": ["assets/galeria-pisos.jpg"],
+      "photos": [
+        "assets/galeria-pisos.jpg"
+      ],
       "videos": []
     },
     {
       "title": "Baños y cocinas",
       "category": "Baños y cocinas",
       "caption": "Detalle y calces en revestimientos de muro",
-      "photos": ["assets/galeria-calces.jpg"],
+      "photos": [
+        "assets/galeria-calces.jpg"
+      ],
       "videos": []
     },
     {
       "title": "Obra entregada",
       "category": "Obra entregada",
       "caption": "Porcelanato limpio y listo para habitar",
-      "photos": ["assets/galeria-entregada.jpg"],
+      "photos": [
+        "assets/galeria-entregada.jpg"
+      ],
       "videos": []
     },
     {
       "title": "Cerámica símil madera",
       "category": "Revestimientos",
       "caption": "Instalación de cerámica imitación parquet",
-      "photos": ["assets/galeria-madera.jpg"],
+      "photos": [
+        "assets/galeria-madera.jpg"
+      ],
       "videos": []
     },
     {
       "title": "Diseño decorativo",
       "category": "Revestimientos",
       "caption": "Composición geométrica en cerámicas grises",
-      "photos": ["assets/galeria-decorativo.jpg"],
+      "photos": [
+        "assets/galeria-decorativo.jpg"
+      ],
       "videos": []
     }
   ]
